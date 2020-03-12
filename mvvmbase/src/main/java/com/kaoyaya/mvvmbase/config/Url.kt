@@ -1,4 +1,4 @@
-package com.kaoyaya.kt.config
+package com.kaoyaya.mvvmbase.config
 
 class Url {
     companion object {

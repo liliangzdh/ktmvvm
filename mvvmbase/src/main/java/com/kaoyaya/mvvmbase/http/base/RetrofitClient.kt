@@ -1,8 +1,7 @@
-package com.kaoyaya.kt.http.base
+package com.kaoyaya.mvvmbase.http.base
 
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import com.kaoyaya.kt.BuildConfig
-import com.kaoyaya.kt.config.Url
+import com.kaoyaya.mvvmbase.BuildConfig
+import com.kaoyaya.mvvmbase.config.Url
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -37,25 +36,26 @@ object RetrofitClient {
             return builder.build()
         }
 
-//    private val retrofit: Retrofit
-//        get() {
-//            return Retrofit.Builder()
-//                .client(client)
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .baseUrl(Url.BaseUrl)
-//                .build()
-//        }
-
-    // 为了 协程 Deferred 能用 添加
     private val retrofit: Retrofit
         get() {
             return Retrofit.Builder()
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .baseUrl(Url.BaseUrl)
                 .build()
         }
+
+    // 为了 协程 Deferred 能用 添加
+    // com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+//    private val retrofit: Retrofit
+//        get() {
+//            return Retrofit.Builder()
+//                .client(client)
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .addCallAdapterFactory(CoroutineCallAdapterFactory())
+//                .baseUrl(Url.BaseUrl)
+//                .build()
+//        }
 
 
     // 创建

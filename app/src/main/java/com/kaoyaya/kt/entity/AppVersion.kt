@@ -7,4 +7,6 @@ data class AppVersion(
     val updateTime: String,
     val versionCode: String,
     val versionName: String
-)
+){
+    constructor():this("",false,"","","","")
+}
