@@ -22,6 +22,7 @@ class LoginActivity : BaseVMActivity<ActivityLoginBinding, LoginViewModel>() {
     }
 
     override fun startObserve() {
+
     }
 
 
