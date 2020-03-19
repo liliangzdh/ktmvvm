@@ -1,6 +1,8 @@
 package com.kaoyaya.kt.ui.login
 
+import android.util.Log
 import androidx.databinding.ObservableField
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.kaoyaya.kt.entity.LoginReqParam
 import com.kaoyaya.kt.http.UserApi
@@ -18,35 +20,54 @@ class LoginViewModel : BaseViewModel() {
     val userName = ObservableField<String>("")
     val passWord = ObservableField<String>("")
 
+
+    // 密码状态
+    val pswState = ObservableField<Boolean>(false)
+
+    val pswStateEvent = MutableLiveData<Boolean>()
+
+
     fun login() {
         val userApi = RetrofitClient.create(UserApi::class.java)
         viewModelScope.launch(Dispatchers.Main) {
-            val username = userName.get()
-            val password = passWord.get()
+            val username = userName.get() ?: ""
+            val password = passWord.get() ?: ""
 
-            if (username.isNullOrBlank() || password.isNullOrBlank()) {
+            Log.e("test", "-=====${username}   : ${password}")
+            if (username.isEmpty() || password.isEmpty()) {
                 showToast("用户名或密码不能为空")
                 return@launch
             }
 
-            val res = safeApi(call = {
-                userApi.passWord(
-                    LoginReqParam(
-                        username = username,
-                        password = password
-                    )
-                )
-            })
+            showLoading("正在登陆...")
 
+            val res = safeApi {
+                userApi.passWord(LoginReqParam(username, password))
+            }
             if (res.code != 200) {
                 showToast(res.msg)
+                dismissLoading()
                 return@launch
             }
 
-            res.result?.let {
-                xToken = it.token
+            res.result?.apply {
+                xToken = token
                 showToast("登录成功")
+                dismissLoading()
             }
         }
     }
+
+    fun clearUsername() {
+        userName.set("")
+    }
+
+
+    fun changePsw() {
+        val state = pswState.get() ?: false
+        pswState.set(!state)
+        pswStateEvent.value = !state
+    }
+
+
 }

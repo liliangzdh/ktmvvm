@@ -8,6 +8,8 @@
             name="viewModel"
             type="com.kaoyaya.kt.ui.login.LoginViewModel" />
 
+        <import type="com.kaoyaya.kt.R" />
+
     </data>
 
     <LinearLayout
@@ -16,10 +18,10 @@
         android:background="@color/white"
         android:orientation="vertical">
 
-
+        <!-- 不知道什么鬼。下面的只能用@string/login。不能直接写 '@{"登录"}' -->
         <include
             layout="@layout/layout_header"
-            binding:title='@{"登录"}' />
+            binding:title='@{@string/login}' />
 
 
         <LinearLayout
@@ -66,6 +68,7 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
+                    android:onClick="@{()->viewModel.clearUsername()}"
                     android:src="@mipmap/clean_edit" />
             </LinearLayout>
 
@@ -110,7 +113,10 @@
                     android:id="@+id/ivShowPsw"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@mipmap/show_psw_press" />
+                    android:onClick="@{()->viewModel.changePsw()}"
+                    binding:image="@{viewModel.pswState?R.mipmap.show_psw:R.mipmap.show_psw_press}" />
+
+
             </LinearLayout>
 
 
@@ -123,6 +129,16 @@
                 android:layout_marginRight="10dp"
                 android:onClick="@{()->viewModel.login()}"
                 android:text="登录" />
+
+            <!--            <Button-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="50dp"-->
+            <!--                android:layout_marginLeft="10dp"-->
+            <!--                android:layout_marginTop="20dp"-->
+            <!--                android:layout_marginRight="10dp"-->
+            <!--                android:onClick="@{()->viewModel.action()}"-->
+            <!--                android:text="点击" />-->
+
 
         </LinearLayout>
 

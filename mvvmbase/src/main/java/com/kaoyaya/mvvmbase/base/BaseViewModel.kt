@@ -1,6 +1,5 @@
 package com.kaoyaya.mvvmbase.base
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kaoyaya.mvvmbase.entity.BaseResponse
@@ -12,6 +11,8 @@ open class BaseViewModel : ViewModel() {
 
 
     val toastMessage = MutableLiveData<String>()
+
+    val loadingEvent = MutableLiveData<String>()
 
     // call 是传递一个方法。 然后在这里 开启 io 协程 调用 请求方法。
     suspend fun <T : Any> safeApi(call: suspend () -> BaseResponse<T>): BaseResponse<T> {
@@ -33,5 +34,15 @@ open class BaseViewModel : ViewModel() {
         msg?.let {
             toastMessage.value = msg
         }
+    }
+
+    // 显示加载弹窗
+    fun showLoading(text: String = "加载中。。") {
+        loadingEvent.value = text
+    }
+
+    // 取消加载弹窗
+    fun dismissLoading() {
+        loadingEvent.value = false.toString()
     }
 }

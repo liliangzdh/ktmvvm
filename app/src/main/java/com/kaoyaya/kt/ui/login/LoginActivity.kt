@@ -1,5 +1,8 @@
 package com.kaoyaya.kt.ui.login
 
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
+import androidx.lifecycle.Observer
 import com.kaoyaya.kt.BR
 import com.kaoyaya.kt.R
 import com.kaoyaya.kt.databinding.ActivityLoginBinding
@@ -19,10 +22,22 @@ class LoginActivity : BaseVMActivity<ActivityLoginBinding, LoginViewModel>() {
     }
 
     override fun initData() {
+//        val showPswPress = R.mipmap.show_psw_press
     }
 
     override fun startObserve() {
-
+        viewModel.apply {
+            pswStateEvent.observe(this@LoginActivity, Observer {
+                if (it) {
+                    binding.editPassWord.transformationMethod =
+                        HideReturnsTransformationMethod.getInstance()
+                } else {
+                    binding.editPassWord.transformationMethod =
+                        PasswordTransformationMethod.getInstance()
+                }
+                binding.editPassWord.setSelection(binding.editPassWord.text.toString().length)
+            })
+        }
     }
 
 

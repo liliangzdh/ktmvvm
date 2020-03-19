@@ -1,5 +1,3 @@
 <resources>
     <string name="app_name">mvvmBase</string>
-
-    <string name="login">登录</string>
 </resources>
