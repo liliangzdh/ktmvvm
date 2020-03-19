@@ -1,6 +1,5 @@
 package com.kaoyaya.kt.ui.login
 
-import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -33,7 +32,6 @@ class LoginViewModel : BaseViewModel() {
             val username = userName.get() ?: ""
             val password = passWord.get() ?: ""
 
-            Log.e("test", "-=====${username}   : ${password}")
             if (username.isEmpty() || password.isEmpty()) {
                 showToast("用户名或密码不能为空")
                 return@launch
