@@ -8,14 +8,14 @@ import com.kaoyaya.kt.entity.AppVersion
 import com.kaoyaya.mvvmbase.entity.BaseResponse
 import com.kaoyaya.kt.http.AppApi
 import com.kaoyaya.mvvmbase.http.base.RetrofitClient
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main2.*
 import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main2)
 
 
         tvName.setOnClickListener {

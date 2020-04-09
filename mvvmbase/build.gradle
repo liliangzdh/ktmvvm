@@ -67,7 +67,32 @@ dependencies {
     // Koin for Android Architecture ViewModel
     api 'org.koin:koin-androidx-viewmodel:2.0.1'
 
-
-    // viewModel
+    // 能在 ViewModel 中使用ViewModelScope
     api "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+    // LiveData
+    api "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
+    // Lifecycles only (without ViewModel or LiveData)  能在 Activity 或 Fragment 中使用LifecycleScope
+    api "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
+
+
+
+    // 状态栏 基础依赖包，必须要依赖
+    api 'com.gyf.immersionbar:immersionbar:3.0.0'
+    // fragment快速实现（可选）
+    api 'com.gyf.immersionbar:immersionbar-components:3.0.0'
+    // kotlin扩展（可选）
+    api 'com.gyf.immersionbar:immersionbar-ktx:3.0.0'
+
+    // 日志
+    api 'com.hdl:elog:v2.0.2'
+
+    // 请求权限 （kotlin 协程方式)
+    api 'com.github.florent37:runtime-permission-kotlin:1.1.2'
+
+    // 一个Android TabLayout库,目前有3个TabLayout （ SlidingTabLayout（参照PagerSlidingTabStrip） ，CommonTabLayout，SegmentTabLayout）
+    api 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
+
+    //底部 tabBar
+    api 'me.majiajie:pager-bottom-tab-strip:2.3.0X'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 }

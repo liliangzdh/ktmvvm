@@ -1,48 +1,56 @@
 package com.kaoyaya.mvvmbase.base
 
+import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.gyf.immersionbar.ktx.immersionBar
-import com.kaoyaya.mvvmbase.R
 import com.kaoyaya.mvvmbase.view.LoadingDialog
 import java.lang.reflect.ParameterizedType
 
 
-abstract class BaseVMActivity<V : ViewDataBinding, VM : BaseViewModel> : AppCompatActivity() {
+abstract class BaseVMFragment<V : ViewDataBinding, VM : BaseViewModel> : Fragment() {
 
-
-    lateinit var viewModel: VM
 
     lateinit var binding: V
 
+    lateinit var viewModel: VM
 
-    private lateinit var loadingDialog: LoadingDialog
-
+    lateinit var loadingDialog: LoadingDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportActionBar?.hide()
-        viewModel = getVM()
-        binding = DataBindingUtil.setContentView(this, getLayoutId())
-        binding.setVariable(initVariableId(), viewModel)
-        initView()
-
-        initData()
-        startObserve()
-
-        loadingDialog = LoadingDialog(this)
-        addObserve()
     }
 
-    abstract fun getLayoutId(): Int
+    lateinit var mContext: Context
 
-//    abstract fun initVM(): VM
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        mContext = inflater.context
+        binding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        loadingDialog = LoadingDialog(mContext)
+        viewModel = getVM()
+        binding.setVariable(initVariableId(), viewModel)
+        initView()
+        initData()
+        startObserve()
+        addObserve()
+
+    }
 
     private fun getVM(): VM {
         val modelClass: Class<VM>
@@ -64,31 +72,29 @@ abstract class BaseVMActivity<V : ViewDataBinding, VM : BaseViewModel> : AppComp
     }
 
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
+    abstract fun getLayoutId(): Int
+
+//    abstract fun initVM(): VM
 
     abstract fun initVariableId(): Int
-
     abstract fun initView()
-
-
     abstract fun initData()
 
     abstract fun startObserve()
 
-
-    private fun showLoading(text: String = "加载中...") {
-        loadingDialog.setText(text)
-    }
-
-    private fun dismissLoading() {
-        loadingDialog.dismiss()
-    }
-
     private fun addObserve() {
         //定义toast
         viewModel.toastMessage.observe(this, Observer {
-            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            Toast.makeText(mContext, it, Toast.LENGTH_SHORT).show()
         })
-
         // 弹窗 设置
         viewModel.loadingEvent.observe(this, Observer {
             if (false.toString() == it) {
@@ -99,22 +105,12 @@ abstract class BaseVMActivity<V : ViewDataBinding, VM : BaseViewModel> : AppComp
         })
     }
 
-
-    fun initStatusBar(view: View) {
-        immersionBar {
-            statusBarDarkFont(true)
-            titleBar(view)
-        }
+    private fun showLoading(text: String = "加载中...") {
+        loadingDialog.setText(text)
     }
 
-    fun initStatusBar() {
-        immersionBar {
-            fitsSystemWindows(true)
-            statusBarColor(R.color.white)
-            statusBarDarkFont(true)
-        }
+    private fun dismissLoading() {
+        loadingDialog.dismiss()
     }
-
 
 }
-
