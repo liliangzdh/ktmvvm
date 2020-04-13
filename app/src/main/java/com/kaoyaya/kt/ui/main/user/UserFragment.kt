@@ -1,9 +1,11 @@
 package com.kaoyaya.kt.ui.main.user
 
+import android.content.Intent
 import com.gyf.immersionbar.ktx.immersionBar
 import com.kaoyaya.kt.BR
 import com.kaoyaya.kt.R
 import com.kaoyaya.kt.databinding.FragmentUserBinding
+import com.kaoyaya.kt.ui.login.LoginActivity
 import com.kaoyaya.mvvmbase.base.BaseVMFragment
 
 class UserFragment : BaseVMFragment<FragmentUserBinding, UserViewModel>() {
@@ -19,8 +21,13 @@ class UserFragment : BaseVMFragment<FragmentUserBinding, UserViewModel>() {
     }
 
     override fun startObserve() {
+
     }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.getUserInfo()
+    }
     fun initStatusBar() {
         immersionBar {
             statusBarDarkFont(false)

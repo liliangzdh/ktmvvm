@@ -1,38 +1,89 @@
 package com.kaoyaya.kt.ui.main
 
 import android.graphics.Color
+import android.view.Gravity
 import android.widget.LinearLayout
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import com.gyf.immersionbar.ImmersionBar
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import com.gyf.immersionbar.ktx.statusBarHeight
 import com.kaoyaya.kt.BR
 import com.kaoyaya.kt.R
+import com.kaoyaya.kt.adapter.HomeExamAdapter
 import com.kaoyaya.kt.databinding.ActivityMainBinding
+import com.kaoyaya.kt.entity.ExamInfo
 import com.kaoyaya.kt.ui.main.home.HomeFragment
 import com.kaoyaya.kt.ui.main.study.StudyFragment
 import com.kaoyaya.kt.ui.main.user.UserFragment
 import com.kaoyaya.kt.view.TabItem
 import com.kaoyaya.mvvmbase.base.BaseVMActivity
+import com.kaoyaya.mvvmbase.utils.SizeUtils
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import me.majiajie.pagerbottomtabstrip.item.BaseTabItem
 import me.majiajie.pagerbottomtabstrip.listener.OnTabItemSelectedListener
-import org.koin.androidx.viewmodel.ext.android.getViewModel
-import java.util.ArrayList
+import java.util.*
 
 
 class MainActivity : BaseVMActivity<ActivityMainBinding, MainViewModel>() {
 
     override fun getLayoutId() = R.layout.activity_main
 
-//    override fun initVM(): MainViewModel = getViewModel()
+    private val examInfoList: MutableList<ExamInfo> = mutableListOf()
+    private val homeExamAdapter by lazy { HomeExamAdapter(examInfoList) }
 
     override fun initVariableId() = BR.viewModel
 
     override fun initView() {
-        val params = binding.drawerTop.layoutParams as LinearLayout.LayoutParams
-        params.setMargins(0, ImmersionBar.getStatusBarHeight(this), 0, 0)
-        binding.drawerTop.layoutParams = params
-
+        (binding.drawerTop.layoutParams as LinearLayout.LayoutParams).setMargins(
+            0,
+            statusBarHeight,
+            0,
+            0
+        )
         initBottomTab()
         initFragment()
+
+        viewModel.request()
+        initDrawerLayout()
+    }
+
+    private fun initDrawerLayout() {
+        binding.examRecyclerView.adapter = homeExamAdapter
+        homeExamAdapter.setOnItemClickListener { _, _, position ->
+
+            binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            if (examInfoList[position].isSelect) {
+                return@setOnItemClickListener
+            }
+            for (i in examInfoList.indices) {
+                if (examInfoList[i].isSelect != (i == position)) {
+                    homeExamAdapter.notifyItemChanged(i)
+                }
+                examInfoList[i].isSelect = i == position
+            }
+
+            binding.drawerLayout.closeDrawers()
+            // 这边储存。。
+            viewModel.saveExamInfo(examInfoList[position])
+
+
+            if (binding.leftDrawer.layoutParams.width == SizeUtils.getScreenWidth(this)) {
+                lifecycleScope.launch {
+                    delay(1000)
+                    binding.leftDrawer.layoutParams.width = SizeUtils.dp2px(this@MainActivity, 245f)
+                    binding.leftDrawer.layoutParams = binding.leftDrawer.layoutParams
+                }
+            }
+        }
+
+        if (viewModel.saveExamInfo.id == 0) {
+            // 禁止滑动
+            binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            binding.drawerLayout.openDrawer(Gravity.LEFT)
+            binding.leftDrawer.layoutParams.width = SizeUtils.getScreenWidth(this)
+        }
     }
 
 
@@ -41,6 +92,12 @@ class MainActivity : BaseVMActivity<ActivityMainBinding, MainViewModel>() {
     }
 
     override fun startObserve() {
+
+        viewModel.examInfoListLiveData.observe(this, Observer {
+            examInfoList.clear()
+            examInfoList.addAll(it)
+            homeExamAdapter.notifyDataSetChanged()
+        })
 
     }
 

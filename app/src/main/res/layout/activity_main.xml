@@ -4,6 +4,7 @@
     xmlns:binding="http://schemas.android.com/tools">
 
     <data>
+
         <import type="android.view.View" />
 
         <variable
@@ -65,8 +66,8 @@
                     android:layout_height="25dp"
                     android:layout_marginLeft="15dp"
                     android:background="@mipmap/delete"
-                    android:visibility="@{viewModel.isExamInfoEmpty?View.INVISIBLE:View.VISIBLE}"
-                    android:onClick="@{()->viewModel.closeCommend()}" />
+                    android:onClick="@{()->viewModel.closeCommend()}"
+                    android:visibility="@{viewModel.isExamInfoEmpty?View.INVISIBLE:View.VISIBLE}" />
 
             </LinearLayout>
 
@@ -85,13 +86,11 @@
                 android:textSize="14sp"
                 android:visibility="@{viewModel.isExamInfoEmpty?View.VISIBLE:View.INVISIBLE}" />
 
-<!--            <androidx.recyclerview.widget.RecyclerView-->
-<!--                android:id="@+id/recyclerView"-->
-<!--                android:layout_width="245dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                binding:itemBinding="@{viewModel.examItemBinding}"-->
-<!--                binding:items="@{viewModel.examList}"-->
-<!--                binding:layoutManager="@{LayoutManagers.ver()}" />-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/examRecyclerView"
+                android:layout_width="245dp"
+                android:layout_height="match_parent"
+                binding:linear="@{1}" />
 
 
         </LinearLayout>

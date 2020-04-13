@@ -52,6 +52,7 @@ class LoginViewModel : BaseViewModel() {
                 xToken = token
                 showToast("登录成功")
                 dismissLoading()
+                finish()
             }
         }
     }

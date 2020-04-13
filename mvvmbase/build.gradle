@@ -94,5 +94,24 @@ dependencies {
 
     //底部 tabBar
     api 'me.majiajie:pager-bottom-tab-strip:2.3.0X'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    api 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+
+    // RecyclerView 的 Data binding套装 （不用写adapter）
+    api 'me.tatarka.bindingcollectionadapter2:bindingcollectionadapter:4.0.0'
+    api 'me.tatarka.bindingcollectionadapter2:bindingcollectionadapter-recyclerview:4.0.0'
+    api 'me.tatarka.bindingcollectionadapter2:bindingcollectionadapter-viewpager2:4.0.0'
+
+    // 万能型adapter
+    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.2'
+
+    //glide图片加载
+    api 'com.github.bumptech.glide:glide:4.10.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
+
+    //json解析
+    api "com.google.code.gson:gson:2.8.5"
+
+    //录播图
+    api 'com.youth.banner:banner:1.4.10'
+    api 'com.makeramen:roundedimageview:2.3.0'
 }

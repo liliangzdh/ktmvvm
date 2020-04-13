@@ -1,6 +1,7 @@
 package com.kaoyaya.mvvmbase.base
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -92,16 +93,31 @@ abstract class BaseVMFragment<V : ViewDataBinding, VM : BaseViewModel> : Fragmen
 
     private fun addObserve() {
         //定义toast
-        viewModel.toastMessage.observe(this, Observer {
+        viewModel.toastMessage.observe(viewLifecycleOwner, Observer {
             Toast.makeText(mContext, it, Toast.LENGTH_SHORT).show()
         })
         // 弹窗 设置
-        viewModel.loadingEvent.observe(this, Observer {
+        viewModel.loadingEvent.observe(viewLifecycleOwner, Observer {
             if (false.toString() == it) {
                 dismissLoading()
             } else {
                 showLoading(it)
             }
+        })
+
+
+        viewModel.intentEvent.observe(viewLifecycleOwner, Observer {
+            val actClass = it["act"] as Class<*>
+            val bundle = it["bundle"]
+            val intent = Intent(context, actClass)
+            bundle?.run {
+                intent.putExtra("bundle", bundle as Bundle)
+            }
+            startActivity(intent)
+        })
+
+        viewModel.finishEvent.observe(viewLifecycleOwner, Observer {
+            activity?.finish()
         })
     }
 
@@ -112,5 +128,8 @@ abstract class BaseVMFragment<V : ViewDataBinding, VM : BaseViewModel> : Fragmen
     private fun dismissLoading() {
         loadingDialog.dismiss()
     }
+
+
+
 
 }

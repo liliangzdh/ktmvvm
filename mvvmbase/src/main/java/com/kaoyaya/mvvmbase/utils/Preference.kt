@@ -8,12 +8,13 @@ import com.kaoyaya.mvvmbase.CommonApplication
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-//使用 代理
-class Preference<T>(val name: String, private val default: T) : ReadWriteProperty<Any?, T> {
+//使用 代理  todo default 不能为null
+class Preference<T : Any>(val name: String, private val default: T) : ReadWriteProperty<Any?, T> {
 
 
     companion object {
         const val Token = "x-token"
+        const val ExamInfo = "ExamInfo"
         // 是否含有token，含有就是登录成功，没有就是没有登录
         fun isLogin(): Boolean {
             val token by Preference(Token, "")
@@ -46,7 +47,7 @@ class Preference<T>(val name: String, private val default: T) : ReadWritePropert
                 is Boolean -> getBoolean(name, default)
                 is String -> getString(name, default)
                 is Float -> getFloat(name, default)
-                else -> parse(getString(name, ""))
+                else -> parse(getString(name, "")) ?: default
             }
             return res as T
         }
@@ -72,7 +73,9 @@ class Preference<T>(val name: String, private val default: T) : ReadWritePropert
     }
 
     // 把 字符串转成 对象
-    private inline fun <reified T> parse(str: String?): T {
-        return Gson().fromJson(str, T::class.java)
+    private fun parse(json: String?): T? {
+        return Gson().fromJson(json, default::class.java)
     }
+
+
 }

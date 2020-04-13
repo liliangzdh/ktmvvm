@@ -1,5 +1,6 @@
 package com.kaoyaya.mvvmbase.base
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -64,7 +65,6 @@ abstract class BaseVMActivity<V : ViewDataBinding, VM : BaseViewModel> : AppComp
     }
 
 
-
     abstract fun initVariableId(): Int
 
     abstract fun initView()
@@ -96,6 +96,22 @@ abstract class BaseVMActivity<V : ViewDataBinding, VM : BaseViewModel> : AppComp
             } else {
                 showLoading(it)
             }
+        })
+
+
+        viewModel.intentEvent.observe(this, Observer {
+            val actClass = it["act"] as Class<*>
+            val bundle = it["bundle"]
+            val intent = Intent(this@BaseVMActivity, actClass)
+            bundle?.run {
+                intent.putExtra("bundle", bundle as Bundle)
+            }
+            startActivity(intent)
+        })
+
+
+        viewModel.finishEvent.observe(this, Observer {
+            finish()
         })
     }
 

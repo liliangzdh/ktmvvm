@@ -19,7 +19,7 @@ interface EduApi {
 
     // 获取 首页 分发资源
     @GET("api/v1/distribute/examType")
-    suspend fun oemExamTypeList(): BaseResponse<List<ExamTypeInfo>>
+    suspend fun oemExamTypeList(): BaseResponse<MutableList<ExamTypeInfo>>
 
 
     @POST("api/v1/edu/course/info")

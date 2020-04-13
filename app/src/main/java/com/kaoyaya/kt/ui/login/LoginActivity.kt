@@ -48,7 +48,7 @@ class LoginActivity : BaseVMActivity<ActivityLoginBinding, LoginViewModel>() {
         }
 
 //        testInterfaceCallBack()
-        testCoroutinePermission()
+//        testCoroutinePermission()
     }
 
     // 接口回调方式 请求权限

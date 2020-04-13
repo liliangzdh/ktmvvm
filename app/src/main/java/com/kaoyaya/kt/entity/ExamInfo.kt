@@ -1,15 +1,8 @@
 package com.kaoyaya.kt.entity
 
 
-class ExamInfo(
-    /**
-     * id : 2
-     * name : 会计初级职称
-     */
-
-    var id: Int, var name: String?
-) {
-
+class ExamInfo {
     var isSelect: Boolean = false
-
+    var id: Int = 0
+    var name: String = ""
 }

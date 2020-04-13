@@ -30,6 +30,7 @@ object RetrofitClient {
 
 
             builder.addInterceptor(loggingInterceptor)
+                .addInterceptor(RequestIntercept())
                 .connectTimeout(timeOut.toLong(), TimeUnit.SECONDS)
 
 

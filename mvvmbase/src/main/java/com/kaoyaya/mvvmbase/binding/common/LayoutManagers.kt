@@ -1,0 +1,1 @@
+package com.kaoyaya.mvvmbase.binding.common
